@@ -16,8 +16,9 @@ jobs:
         uses: ./.github/actions/install-node-deps
       - name: Build packages
         run: yarn package
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          tag: ${{ github.event.release.tag_name }}
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./package.json
+      - name: Set version in package.json
+        run: npm version $RELEASE_VERSION --no-git-tag-version
+      - name: Publish npm package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
