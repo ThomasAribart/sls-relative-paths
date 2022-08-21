@@ -18,7 +18,6 @@ jobs:
         run: yarn package
       - name: Set version in package.json
         run: npm version $RELEASE_VERSION --no-git-tag-version
-      - name: Publish npm package
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
