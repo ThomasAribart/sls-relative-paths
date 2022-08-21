@@ -1,6 +1,5 @@
 {
   "name": "sls-relative-paths",
-  "version": "0.0.1",
   "description": "Allow defining Serverless Framework functions handlers paths relatively",
   "publishConfig": {
     "access": "public"
