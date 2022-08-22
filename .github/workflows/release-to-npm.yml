@@ -17,7 +17,7 @@ jobs:
       - name: Build packages
         run: yarn package
       - name: Set version in package.json
-        run: npm version $RELEASE_VERSION --no-git-tag-version
+        run: npm version ${{ github.event.release.tag_name }} --no-git-tag-version
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
