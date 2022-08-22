@@ -1416,6 +1416,11 @@
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.7.0.tgz#ea03e9f0376a4446f44797ca19d9c46c36e352dc"
   integrity sha512-RI1L7N4JnW5gQw2spvL7Sllfuf1SaHdrZpCHiBlCXjIlufi1SMNnbu2teze3/QE67Fg2tBlH7W+mi4hVNk4p0A==
 
+"@types/serverless@^3.12.8":
+  version "3.12.8"
+  resolved "https://registry.yarnpkg.com/@types/serverless/-/serverless-3.12.8.tgz#6a34e382e4887ce4e2dca1bf309e3015cd21e200"
+  integrity sha512-z2qnRRghiVU0Gi7tYDabDjCgz13nPw8uanTaWFTVr0YJ8H2+2D4tY3R45WQ50b4bG3gA/TP3sYNuxVI5Epf90g==
+
 "@types/stack-utils@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"

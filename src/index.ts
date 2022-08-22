@@ -1,2 +1,5 @@
-export const myConstant = 'this is a test constant';
-export const anotherConstant = 'this is another test constant';
+import { RelativePathsSlsPlugin } from './relativePathsSlsPlugin';
+
+export type { CustomProperties } from './relativePathsSlsPlugin';
+
+module.exports = RelativePathsSlsPlugin;
