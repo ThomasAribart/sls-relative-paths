@@ -2,7 +2,21 @@ import { join, relative, sep } from 'path';
 import type Plugin from 'serverless/classes/Plugin';
 import type Serverless from 'serverless/index';
 
-const customPropertiesSchema = {
+const servicePropertiesSchema = {
+  type: 'object',
+  properties: {
+    default: { type: 'string' },
+  },
+  additionalProperties: false,
+};
+
+export type ServiceProperties = {
+  relativePaths?: {
+    default?: string;
+  };
+};
+
+const fnPropertiesSchema = {
   type: 'object',
   properties: {
     dirName: { type: 'string' },
@@ -11,36 +25,59 @@ const customPropertiesSchema = {
   additionalProperties: false,
 };
 
-export type CustomProperties = {
+export type FnProperties = {
   dirName: string;
 };
 
 export class RelativePathsSlsPlugin implements Plugin {
   hooks: Plugin.Hooks;
 
-  constructor(serverless: Serverless) {
+  constructor(
+    serverless: Serverless & {
+      // Incomplete type from @serverless/typescript
+      classes: { Error: new (message: string, code: string) => Error };
+    } & { configurationInput: ServiceProperties },
+  ) {
+    serverless.configSchemaHandler.defineTopLevelProperty(
+      'relativePaths',
+      servicePropertiesSchema,
+    );
+
     serverless.configSchemaHandler.defineFunctionProperties(
       'aws',
-      customPropertiesSchema,
+      fnPropertiesSchema,
     );
 
     this.hooks = {
       initialize: () => {
         const rootDirName = serverless.config.servicePath;
 
+        const defaultRelativePath =
+          serverless.configurationInput.relativePaths?.default;
+
         Object.entries(serverless.service.functions).forEach(
           ([functionName, functionDefinition]) => {
             const { dirName: fnDirName, handler } =
               functionDefinition as Serverless.FunctionDefinitionHandler &
-                CustomProperties;
+                FnProperties;
+
+            const appliedRelativePath =
+              (handler as string | undefined) ?? defaultRelativePath;
+
+            if (typeof appliedRelativePath !== 'string') {
+              throw new serverless.classes.Error(
+                `No relative path found for function ${functionName}\n\nLearn more on https://github.com/ThomasAribart/sls-relative-paths`,
+                'INVALID_PLUGIN_INPUT',
+              );
+            }
 
             const functionRef = serverless.service.functions[
               functionName
-            ] as Serverless.FunctionDefinitionHandler & CustomProperties;
+            ] as Serverless.FunctionDefinitionHandler & FnProperties;
 
             functionRef.handler = join(
               relative(rootDirName, fnDirName),
-              handler.replace(/\//g, sep),
+              appliedRelativePath.replace(/\//g, sep),
             )
               .split(sep)
               .join('/');

@@ -1,15 +1,15 @@
 # ✨ DRYer Serverless configuration
 
-When defining a Serverless Framework configuration file in TS or JS, it's common to import functions configurations from the same folders as their handlers.
+When defining a Serverless Framework service file in TS or JS, it's common to import functions configurations from the same folders as their handlers.
 
-It helps keeping the config file light, even when the number of functions grows:
+It helps keeping the service file light, even when the number of functions grows:
 
 ```typescript
 // serverless.ts(|js)
 import { myFunction } from 'functions/myFunction/config.ts(|js)';
 import { anotherFunction } from 'functions/anotherFunction/config.ts(|js)';
 
-module.exports = {
+export const myService = {
   service: 'my-service',
   functions: {
     myFunction,
@@ -20,12 +20,14 @@ module.exports = {
 };
 ```
 
-However, those handlers paths **still need to be provided**:
+However, handlers paths **still need to be provided** in the functions files:
 
 ```typescript
 // functions/myFunction/handler.ts(|js)
 export const main = ... // function code
+```
 
+```typescript
 // functions/myFunction/config.ts(|js)
 export const myFunction = {
   // 👇 Still needed
@@ -40,13 +42,13 @@ That's when `sls-relative-paths` comes to the rescue 💪
 
 ## Sls-relative-paths
 
-The `sls-relative-paths` plugin allows you to define your handlers paths **relatively** to their configurations:
+The `sls-relative-paths` plugin allows you to define your handlers paths **relatively** to their functions files:
 
 ```typescript
 // serverless.ts(|js)
 import { myFunction } from 'functions/myFunction/config.ts';
 
-module.exports = {
+export const myService = {
   service: 'my-service',
   plugins: ['sls-relative-paths'], // 👈 add plugin
   functions: {
@@ -55,11 +57,42 @@ module.exports = {
   },
   ...
 };
+```
 
+```typescript
 // functions/myFunction/config.ts(|js)
 export const myFunction = {
   dirName: __dirname, // 👈 dirname is required to re-construct the complete path
   handler: './handler.main', // 🎉 relative path will work!
+  ...
+};
+```
+
+You can also set a default relative path in your service file:
+
+```typescript
+// serverless.ts(|js)
+import { myFunction } from 'functions/myFunction/config.ts';
+
+export const myService = {
+  service: 'my-service',
+  plugins: ['sls-relative-paths'],
+  functions: {
+    myFunction,
+    ...
+  },
+  relativePaths: {
+    default: 'handler.main'
+  },
+  ...
+};
+```
+
+```typescript
+// functions/myFunction/config.ts(|js)
+export const myFunction = {
+  dirName: __dirname,
+  // 🙌 'handler' prop not needed and defaulted to 'handler.main'
   ...
 };
 ```
@@ -76,17 +109,40 @@ yarn add --dev sls-relative-paths
 
 ## Other exports
 
-### `CustomProperties` type
+### `ServiceProperties` type
 
-In TS, you can assign this type to your functions configurations:
+In TS, you can assign this type to your service file:
 
 ```typescript
-import type { CustomProperties } from 'sls-relative-path';
+// serverless.ts(|js)
+import type { ServiceProperties } from 'sls-relative-path';
 import type { AWS } from '@serverless/typescript';
 
-type FnConfig = NonNullable<AWS['functions']>[string] & CustomProperties;
+export const myService: AWS & ServiceProperties = {
+  service: 'my-service',
+  plugins: ['sls-relative-paths'],
+  functions: {
+    myFunction,
+    ...
+  },
+  relativePaths: {
+    default: ['handler', 'main'] // ❌ default should be a string
+  },
+  ...
+};
+```
 
-// functions/myFunction/config.ts(|js)
+### `FnProperties` type
+
+In TS, you can assign this type to your functions files:
+
+```typescript
+  // functions/myFunction/config.ts(|js)
+import type { FnProperties } from 'sls-relative-path';
+import type { AWS } from '@serverless/typescript';
+
+type FnConfig = NonNullable<AWS['functions']>[string] & FnProperties;
+
 export const myFunction: FnConfig = {
   dirName: undefined, // ❌ dirName is required
   handler: './handler.main',

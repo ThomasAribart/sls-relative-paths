@@ -1,9 +1,9 @@
 import type { AWS } from '@serverless/typescript';
 
-import type { CustomProperties } from '~/plugin';
+import type { FnProperties } from '~/plugin';
 
 export const otherValidFn: NonNullable<AWS['functions']>[string] &
-  CustomProperties = {
+  FnProperties = {
   dirName: __dirname,
   handler: './foo.baz',
 };
