@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { CustomProperties } from '~/plugin';
+import type { CustomProperties } from '~/plugin';
 
 export const otherValidFn: NonNullable<AWS['functions']>[string] &
   CustomProperties = {
