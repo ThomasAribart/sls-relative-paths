@@ -11,7 +11,12 @@ module.exports = {
       presets: [['@babel/preset-env', { modules: false }], ...defaultPresets],
     },
   },
-  ignore: [/.*\/(.*\.|)test\.tsx?/, /node_modules/, /dist/],
+  ignore: [
+    /.*\/(.*\.|)test\.tsx?/,
+    /.*\/(.*\.|)test\.d\.tsx?/,
+    /node_modules/,
+    /dist/,
+  ],
   plugins: [
     [
       'module-resolver',
