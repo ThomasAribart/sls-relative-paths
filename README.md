@@ -1,10 +1,8 @@
-<p align="right">
-  <i>If you use this repo, star it ✨</i>
-</p>
+# ✨ DRYer Serverless configuration
 
-# Sls-relative-paths
+When defining a Serverless Framework configuration file in TS or JS, it's common to import functions configurations from the same folders as their handlers.
 
-When defining a Serverless Framework configuration file in TS or JS rather than YAML or JSON (which I highly recommend), it's quite common to import functions configurations from folders that are close to their handlers, as it helps keeping the configuration file light, even when the number of functions in the service grows.
+It helps keeping the config file light, even when the number of functions grows:
 
 ```typescript
 // serverless.ts(|js)
@@ -18,11 +16,11 @@ module.exports = {
     anotherFunction,
     ...
   },
-  // ...
+  ...
 };
 ```
 
-Meanwhile, the functions configurations are still required to explicitely specify the paths of their handlers relative to the configuration file.
+However, those handlers paths still need to be provided:
 
 ```typescript
 // functions/myFunction/handler.ts(|js)
@@ -30,6 +28,7 @@ export const main = ... // function code
 
 // functions/myFunction/config.ts(|js)
 export const myFunction = {
+  // 👇 Still needed
   handler: 'functions/myFunction/handler.main', // Wait... but that's where I am 😭
   ...
 };
@@ -37,7 +36,11 @@ export const myFunction = {
 
 This is a code duplication that can annoy developers, and frequently cause bugs (typically when moving code around or copy/pasting functions).
 
-That's when `sls-relative-paths` comes to the rescue 💪 It allows you to define your handlers paths **relatively** to their configurations:
+That's when `sls-relative-paths` comes to the rescue 💪
+
+## Sls-relative-paths
+
+The `sls-relative-paths` plugin allows you to define your handlers paths **relatively** to their configurations:
 
 ```typescript
 // serverless.ts(|js)
@@ -75,7 +78,7 @@ yarn add --dev sls-relative-paths
 
 ### `CustomProperties` type
 
-In TS, you can use this type to type your function configuration.
+In TS, you can assign this type to your functions configurations:
 
 ```typescript
 import type { CustomProperties } from 'sls-relative-path';
@@ -90,3 +93,7 @@ export const myFunction: FnConfig = {
   ...
 };
 ```
+
+<p align="right">
+  <i>If you use this repo, star it ✨</i>
+</p>
