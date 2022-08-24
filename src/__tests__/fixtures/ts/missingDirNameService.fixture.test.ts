@@ -5,7 +5,7 @@ import { missingDirNameFn } from './functions/missingDirNameFn.fixture.test';
 const missingDirNameService: AWS = {
   service: 'app',
   configValidationMode: 'error',
-  plugins: ['../../index.ts'],
+  plugins: ['../../../index.ts'],
   provider: {
     name: 'aws',
   },

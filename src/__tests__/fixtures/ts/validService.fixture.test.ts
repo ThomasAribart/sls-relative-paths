@@ -6,7 +6,7 @@ import { validFn } from './functions/validFn.fixture.test';
 const validService: AWS = {
   service: 'app',
   configValidationMode: 'error',
-  plugins: ['../../index.ts'],
+  plugins: ['../../../index.ts'],
   provider: {
     name: 'aws',
   },
