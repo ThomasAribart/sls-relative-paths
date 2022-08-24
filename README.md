@@ -6,8 +6,8 @@ It helps keeping the config file light, even when the number of functions grows:
 
 ```typescript
 // serverless.ts(|js)
-import { myFunction } from 'functions/myFunction/config.ts|js';
-import { anotherFunction } from 'functions/anotherFunction/config.ts|js';
+import { myFunction } from 'functions/myFunction/config.ts(|js)';
+import { anotherFunction } from 'functions/anotherFunction/config.ts(|js)';
 
 module.exports = {
   service: 'my-service',
@@ -20,7 +20,7 @@ module.exports = {
 };
 ```
 
-However, those handlers paths still need to be provided:
+However, those handlers paths **still need to be provided**:
 
 ```typescript
 // functions/myFunction/handler.ts(|js)
