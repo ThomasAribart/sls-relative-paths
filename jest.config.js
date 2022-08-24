@@ -16,6 +16,7 @@ const commonConfig = {
   moduleNameMapper: {
     '^~/(.*)$': '<rootDir>/$1',
   },
+  testTimeout: 30000,
 };
 
 module.exports = commonConfig;

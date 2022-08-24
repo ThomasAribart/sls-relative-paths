@@ -1,5 +1,5 @@
-import { RelativePathsSlsPlugin } from './relativePathsSlsPlugin';
+import { RelativePathsSlsPlugin } from './plugin';
 
-export type { CustomProperties } from './relativePathsSlsPlugin';
+export type { CustomProperties } from './plugin';
 
 module.exports = RelativePathsSlsPlugin;
