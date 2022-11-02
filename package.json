@@ -48,7 +48,8 @@
   },
   "homepage": "https://github.com/ThomasAribart/sls-relative-paths#readme",
   "dependencies": {
-    "@types/serverless": "^3.12.8"
+    "@types/serverless": "^3.12.8",
+    "@babel/runtime": "^7.18.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
